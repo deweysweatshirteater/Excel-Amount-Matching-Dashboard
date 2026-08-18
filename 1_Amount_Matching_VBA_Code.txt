@@ -1,0 +1,139 @@
+Option Explicit
+
+Private Const MATCH_SHEET As String = “Matching Dashboard”
+
+Public Sub SetupMatchingDashboard()
+
+    Dim ws As Worksheet
+    Dim btn As Shape
+
+    Application.ScreenUpdating = False
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(MATCH_SHEET)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add
+        ws.Name = MATCH_SHEET
+    Else
+        ws.Cells.Clear
+    End If
+
+    ws.Range("A1:C1").Value = Array("Amount List", "Target Amount", "Possible Combinations")
+
+    ws.Range("A1:C1").Font.Bold = True
+
+    ws.Range("A2").Value = "Paste individual amounts here"
+    ws.Range("B2").Value = "Paste target totals here"
+
+    ws.Columns("A:C").ColumnWidth = 28
+
+    On Error Resume Next
+    ws.Shapes("FindMatches").Delete
+    On Error GoTo 0
+
+    Set btn = ws.Shapes.AddShape(msoShapeRoundedRectangle, 20, 80, 220, 40)
+    btn.Name = "FindMatches"
+    btn.TextFrame2.TextRange.Text = "Analyze Possible Matches"
+    btn.OnAction = "FindAmountMatches"
+
+    Application.ScreenUpdating = True
+
+    MsgBox "Dashboard created. Paste amounts into Column A and targets into Column B."
+
+End Sub
+
+Public Sub FindAmountMatches()
+
+    Dim ws As Worksheet
+    Dim lastAmountRow As Long
+    Dim lastTargetRow As Long
+    Dim i As Long, j As Long
+    Dim values() As Double
+    Dim target As Double
+
+    Set ws = ThisWorkbook.Worksheets(MATCH_SHEET)
+
+    ws.Range("C:C").ClearContents
+    ws.Range("C1").Value = "Possible Combinations"
+
+    lastAmountRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    lastTargetRow = ws.Cells(ws.Rows.Count, "B").End(xlUp).Row
+
+    If lastAmountRow < 2 Or lastTargetRow < 2 Then
+        MsgBox "Paste amounts into Column A and target totals into Column B first."
+        Exit Sub
+    End If
+
+    ReDim values(1 To lastAmountRow - 1)
+
+    For i = 2 To lastAmountRow
+        If IsNumeric(ws.Cells(i, "A").Value) Then
+            values(i - 1) = CDbl(ws.Cells(i, "A").Value)
+        End If
+    Next i
+
+    For j = 2 To lastTargetRow
+
+        If IsNumeric(ws.Cells(j, "B").Value) Then
+
+            target = CDbl(ws.Cells(j, "B").Value)
+
+            ws.Cells(j, "C").Value = FindCombinations(values, target)
+
+        End If
+
+    Next j
+
+    MsgBox "Analysis complete."
+
+End Sub
+
+Private Function FindCombinations(values() As Double, target As Double)
+As String
+
+    Dim results As String
+    Dim combo As String
+
+    results = SearchSubset(values, target, 1, 0, "")
+
+    If results = "" Then
+        FindCombinations = "No match found"
+    Else
+        FindCombinations = results
+    End If
+
+End Function
+
+Private Function SearchSubset(values() As Double, target As Double,
+index As Long, total As Double, combo As String) As String
+
+    Dim answer As String
+    Dim i As Long
+
+    If Abs(total - target) <= 0.01 Then
+        SearchSubset = combo
+        Exit Function
+    End If
+
+    If total > target Then Exit Function
+
+    If index > UBound(values) Then Exit Function
+
+    For i = index To UBound(values)
+
+        If values(i) <> 0 Then
+
+            answer = SearchSubset(values, target, i + 1, total + values(i), combo & Format(values(i), "$#,##0.00") & " + ")
+
+            If answer <> "" Then
+                SearchSubset = answer
+                Exit Function
+            End If
+
+        End If
+
+    Next i
+
+End Function

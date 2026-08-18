@@ -1,0 +1,50 @@
+AMOUNT MATCHING DASHBOARD — SETUP INSTRUCTIONS
+
+WHAT IT DOES
+
+This workbook creates a dashboard where users can paste:
+
+Column A: Individual transaction amounts
+
+Column B: Target totals
+
+Column C: The VBA analysis returns possible combinations of Column A
+values that equal each target total.
+
+CREATE THE MACRO WORKBOOK
+
+1.  Open Microsoft Excel.
+2.  Create a blank workbook.
+3.  Save as Excel Macro-Enabled Workbook (*.xlsm).
+
+ADD THE VBA CODE
+
+1.  Open the file named 1_Amount_Matching_VBA_Code.txt.
+2.  Copy all VBA code.
+3.  Press Alt+F11 in Excel.
+4.  Choose Insert > Module.
+5.  Paste the code.
+6.  Save the workbook.
+
+CREATE THE DASHBOARD
+
+1.  Run the macro SetupMatchingDashboard.
+2.  A Matching Dashboard sheet will be created.
+3.  Paste source amounts into Column A.
+4.  Paste target totals into Column B.
+5.  Click Analyze Possible Matches.
+
+IMPORTANT NOTES
+
+-   The script searches combinations of amounts from Column A.
+-   It allows one or more amounts to make a target total.
+-   Matching tolerance is one cent.
+-   The current version is designed for reasonable-sized lists.
+-   Very large datasets may require optimization.
+
+FUTURE IMPROVEMENTS
+
+Possible upgrades: - Show all possible combinations instead of only the
+first match. - Add maximum combination limits. - Add date/source
+columns. - Add export reports. - Add faster algorithms for thousands of
+amounts.
