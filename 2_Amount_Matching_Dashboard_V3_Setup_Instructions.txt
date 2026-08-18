@@ -1,0 +1,20 @@
+AMOUNT MATCHING DASHBOARD V3
+
+Purpose: Reconcile negative balances by finding combinations of
+available amounts that offset them.
+
+Column A: Available amounts.
+
+Column B: Negative amounts to resolve.
+
+Output columns: Target Match Found Matched Total Variance Quality
+
+Logic: Negative Target + Selected Column A amounts should approach zero.
+
+Variance Allowance: Adjustable by the user. Default is $150,000.
+
+Ranking: 1. Exact zero balance 2. Lowest variance 3. Fewest transactions
+
+Setup: 1. Open Excel. 2. Save as an Excel Macro-Enabled Workbook
+(*.xlsm). 3. Open VBA Editor. 4. Insert Module. 5. Paste VBA code. 6.
+Run SetupMatchingDashboard.
