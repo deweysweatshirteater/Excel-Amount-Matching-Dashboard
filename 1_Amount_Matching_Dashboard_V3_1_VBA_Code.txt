@@ -1,0 +1,42 @@
+Option Explicit
+
+Private Const DASHBOARD_SHEET As String = "Matching Dashboard"
+Private Const DEFAULT_VARIANCE As Double = 150000
+Private Const MAX_RESULTS As Long = 25
+
+Public Sub SetupMatchingDashboard()
+
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(DASHBOARD_SHEET)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add
+        ws.Name = DASHBOARD_SHEET
+    Else
+        ws.Cells.Clear
+    End If
+
+    ws.Range("A1").Value = "Available Amounts"
+    ws.Range("B1").Value = "Amounts To Resolve"
+    ws.Range("D1:H1").Value = Array("Target", "Match Found", "Matched Total", "Variance", "Quality")
+
+    ws.Range("J1").Value = "Variance Allowance"
+    ws.Range("K1").Value = DEFAULT_VARIANCE
+
+    ws.Range("J2").Value = "Maximum Results"
+    ws.Range("K2").Value = MAX_RESULTS
+
+    ws.Rows(1).Font.Bold = True
+
+    MsgBox "Dashboard created."
+
+End Sub
+
+Public Sub AnalyzeMatches()
+
+    MsgBox "Matching engine starting."
+
+End Sub

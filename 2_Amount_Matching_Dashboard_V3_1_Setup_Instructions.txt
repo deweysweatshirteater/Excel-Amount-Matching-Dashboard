@@ -1,0 +1,27 @@
+AMOUNT MATCHING DASHBOARD V3.1 SETUP INSTRUCTIONS
+
+Purpose:
+Find combinations of available amounts that offset negative amounts to resolve.
+
+Column A:
+Available amounts.
+
+Column B:
+Negative amounts to resolve.
+
+Output:
+Target
+Match Found
+Matched Total
+Variance
+Quality
+
+Variance allowance is adjustable. Default is 150000.
+
+Setup:
+1. Open Excel.
+2. Save as Excel Macro-Enabled Workbook (*.xlsm).
+3. Open VBA Editor.
+4. Insert Module.
+5. Paste VBA code.
+6. Run SetupMatchingDashboard.
