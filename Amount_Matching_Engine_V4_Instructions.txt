@@ -1,0 +1,75 @@
+AMOUNT MATCHING ENGINE V4 - INSTALLATION AND USE
+
+WHAT VERSION 4 ADDS
+- A maximum-use limit for every available-amount row
+- Up to 25 ranked solutions for each target
+- Automatic allocation of the Rank 1 solution
+- A Uses Consumed audit column
+- A Run Amount Matcher button on the dashboard
+
+UPGRADE INSTALLATION
+1. Open the workbook and open the VBA editor.
+2. Delete the older module containing AnalyzeMatches. There must be only one
+   public procedure named AnalyzeMatches in the workbook.
+3. Insert a new standard module.
+4. Open Amount_Matching_Engine_V4_FINAL.bas in a plain-text editor.
+5. Copy everything except the first Attribute VB_Name line.
+6. Paste starting with Option Explicit into the new module.
+7. Save the workbook as an Excel Macro-Enabled Workbook (.xlsm).
+8. From Excel's macro list, run InstallAmountMatcherV4 once.
+9. Return to Matching Dashboard and use the Run Amount Matcher button.
+
+INPUTS
+Column A: Available Amounts
+Column B: Amounts To Resolve
+Column C: Maximum Uses for the corresponding row in column A
+
+If a Maximum Uses cell is blank, the Default maximum uses setting in K7 applies.
+Enter 0 in column C to disable a source row without deleting it.
+
+OUTPUTS
+Columns D:I contain Target, Rank, Match Found, Matched Total, Variance, and Quality.
+Column L shows how many times each source row was consumed by a Rank 1 solution.
+
+Rank 1 is highlighted in green and is the automatically selected allocation.
+Ranks 2 and higher are alternatives. Alternatives do not consume usage capacity.
+Later targets are searched after the Rank 1 solution has consumed its source rows.
+
+SETTINGS
+K2: Variance allowance
+K3: Maximum targets analyzed
+K4: Maximum transactions in one match
+K5: Maximum combinations examined per target
+K6: Solutions shown per target (maximum 25)
+K7: Default maximum uses when column C is blank
+
+The search-limit setting from Version 3 is preserved if it already contains a
+number. A setting of 5000000 is a reasonable starting point for larger data sets,
+but higher settings can make Excel take longer.
+
+USAGE RESET
+Uses Consumed resets to zero at the beginning of every AnalyzeMatches run. This
+prevents repeated test runs from silently consuming capacity. The limit is enforced
+across targets during the current run, in top-to-bottom target order.
+
+IMPORTANT ALLOCATION DETAIL
+Each source row can appear only once inside a single combination. A Maximum Uses
+value greater than 1 allows that source row to be selected for multiple different
+targets, not repeated several times inside one target combination.
+
+QUICK TEST
+Available Amounts (A2:A6):
+50000
+75000
+25000
+100000
+300000
+
+Targets (B2:B3):
+-150000
+-425000
+
+To allow the 100000 row to participate in both selected solutions, enter 2 beside
+it in column C. Otherwise, with the default maximum of 1, the first Rank 1 solution
+may consume it before the second target is analyzed. This is the intended allocation
+behavior.
