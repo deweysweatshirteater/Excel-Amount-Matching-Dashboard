@@ -1,0 +1,57 @@
+AMOUNT MATCHING ENGINE V3 - INSTALLATION AND TEST
+
+IMPORTANT
+This file replaces the placeholder AnalyzeMatches macro. Do not keep two public
+procedures named AnalyzeMatches, or VBA will report "Ambiguous name detected."
+
+INSTALLATION
+1. Open the workbook and press Alt+F11 (or Option+F11 on some Macs).
+2. In the Project pane, open the module containing the placeholder AnalyzeMatches.
+3. Delete that entire placeholder module, or remove its AnalyzeMatches procedure.
+4. Choose File > Import File and select Amount_Matching_Engine_V3_FINAL.bas.
+   Alternatively, insert a new module and paste the complete .bas file contents,
+   excluding the first Attribute VB_Name line if Excel flags it during pasting.
+5. Save the workbook as an Excel Macro-Enabled Workbook (.xlsm).
+6. Run AnalyzeMatches.
+
+WORKSHEET LAYOUT
+Sheet name: Matching Dashboard
+Column A, starting at A2: available transaction amounts
+Column B, starting at B2: amounts to resolve (negative or positive targets)
+Columns D:H: generated results
+
+SETTINGS
+K2: variance allowance (default 150000)
+K3: maximum target results (default 25)
+K4: maximum transactions in one match (default 8)
+K5: maximum combinations examined per target (default 250000)
+
+The engine prevents duplicate permutations within each target search. For example,
+50000 + 25000 and 25000 + 50000 are treated as the same combination. Available
+rows may be considered again for a different target because each target is analyzed
+independently.
+
+TEST DATA
+Column A:
+50000
+75000
+25000
+100000
+300000
+
+Column B:
+-150000
+-425000
+
+Expected exact results:
+-150000 -> 50000 + 100000 = 150000, variance 0, EXACT
+-425000 -> 25000 + 100000 + 300000 = 425000, variance 0, EXACT
+
+The first result uses two transactions because exact matches are ranked by the
+fewest transactions. It is therefore preferable to the three-item example
+50000 + 75000 + 25000, which is also exact.
+
+SEARCH-LIMIT NOTE
+Combination matching can grow rapidly. If the search limit is reached, the Quality
+column says SEARCH LIMITED. Increase K5 for a deeper search, or reduce K4 for a
+faster search.
